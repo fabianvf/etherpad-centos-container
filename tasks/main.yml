@@ -11,9 +11,9 @@
   - nodejs
 
 - name: initialize database
-  hosts: "{{ db_host }}"
   remote_user: mysql
   command: mysqld --initialize-insecure
+  delegate_to: "{{ db_host }}"
   ignore_errors: true
 
 - name: create etherpad-lite database
