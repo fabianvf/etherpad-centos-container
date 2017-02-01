@@ -11,7 +11,7 @@
   - nodejs
 
 - name: initialize database
-  hosts: {{ db_host }}
+  hosts: "{{ db_host }}"
   remote_user: mysql
   command: mysqld --initialize-insecure
   ignore_errors: true
