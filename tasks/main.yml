@@ -1,0 +1,40 @@
+---
+- name: create etherpad-lite database
+  mysql_db: name={{ db_name }} encoding=utf8 state=present host={{ db_host }}
+  ignore_errors: true
+
+- name: create etherpad-lite mysql user
+  mysql_user: name={{ db_user }} password={{ db_password }} priv={{ db_name }}.*:ALL state=present host={{ db_host }}
+  ignore_errors: true
+
+- name: Install required software packages
+  package: name={{ item }} state=installed 
+  with_items:
+  - git
+  - gcc
+  - libabw
+  - curl
+  - python-devel
+  - python-pip
+  - nodejs
+
+- name: create etherpad-lite user
+  user: name=etherpad-lite shell=/bin/bash
+
+- name: lock etherpad-lite user's password
+  command: passwd -l etherpad-lite
+
+- name: check out etherpad-lite code
+  git: repo=https://github.com/ether/etherpad-lite.git dest=/opt/etherpad-lite version={{ etherpad_version }}
+
+- name: create log directory
+  file: path=/var/log/etherpad-lite owner=etherpad-lite group=etherpad-lite state=directory
+
+- name: create etherpad-lite startup script
+  template: src=templates/etc_init_etherpad-lite.j2 dest=/etc/init.d/etherpad-lite mode=0755
+
+- name: configure etherpad-lite
+  template: src=templates/opt_etherpad-lite_settings.json.j2 dest=/opt/etherpad-lite/settings.json mode=0640 owner=etherpad-lite group=etherpad-lite
+
+- name: update permissions for etherpad-lite directory
+  file: path=/opt/etherpad-lite owner=etherpad-lite group=etherpad-lite recurse=yes state=directory
