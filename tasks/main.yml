@@ -3,7 +3,8 @@
   copy:
     content: |
       [mysql57-community]
-      name=baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/
+      name=MySQL 5.7 Community Server
+      baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/
       enabled=1
       gpgcheck=0
     dest: /etc/yum.repos.d/mysql.repo
