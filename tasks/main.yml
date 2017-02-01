@@ -6,6 +6,7 @@
   - gcc
   - libabw
   - curl
+  - mysql-devel
   - python-devel
   - python-pip
   - nodejs
