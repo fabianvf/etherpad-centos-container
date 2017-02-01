@@ -10,6 +10,12 @@
   - python-pip
   - nodejs
 
+- name: initialize database
+  hosts: {{ db_host }}
+  remote_user: mysql
+  command: mysqld --initialize-insecure
+  ignore_errors: true
+
 - name: create etherpad-lite database
   mysql_db: name={{ db_name }} encoding=utf8 state=present login_host={{ db_host }}
   ignore_errors: true
