@@ -1,4 +1,13 @@
 ---
+- name: Add mysql repo
+  copy:
+    content: |
+      [mysql57-community]
+      name=baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/
+      enabled=1
+      gpgcheck=0
+    dest: /etc/yum.repos.d/mysql.repo
+
 - name: Install required software packages
   package: name={{ item }} state=installed 
   with_items:
@@ -10,6 +19,7 @@
   - python-devel
   - python-pip
   - nodejs
+
 
 - name: install mysql-pthon
   pip:
