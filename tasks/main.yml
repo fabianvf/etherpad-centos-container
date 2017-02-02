@@ -1,14 +1,4 @@
 ---
-- name: Add mysql repo
-  copy:
-    content: |
-      [mysql57-community]
-      name=MySQL 5.7 Community Server
-      baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/6/$basearch/
-      enabled=1
-      gpgcheck=0
-    dest: /etc/yum.repos.d/mysql.repo
-
 - name: Install required software packages
   package: name={{ item }} state=installed 
   with_items:
@@ -16,29 +6,9 @@
   - gcc
   - libabw
   - curl
-  - mysql-community-client
   - python-devel
   - python-pip
   - nodejs
-
-
-- name: install mysql-pthon
-  pip:
-    name: mysql-python
-
-- name: initialize database
-  remote_user: mysql
-  command: mysqld --initialize-insecure
-  delegate_to: "{{ db_host }}"
-  ignore_errors: true
-
-- name: create etherpad-lite database
-  mysql_db: name={{ db_name }} encoding=utf8 state=present login_host={{ db_host }}
-  ignore_errors: true
-
-- name: create etherpad-lite mysql user
-  mysql_user: name={{ db_user }} password={{ db_password }} priv={{ db_name }}.*:ALL state=present login_host={{ db_host }}
-  ignore_errors: true
 
 - name: create etherpad-lite user
   user: name=etherpad-lite shell=/bin/bash
