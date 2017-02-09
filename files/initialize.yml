@@ -1,0 +1,20 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Get environment variables
+      set_fact:
+        db_user: "{{ lookup('env', 'DATABASE_USER') | default('admin', true)}}"
+        db_host: "{{ lookup('env', 'DATABASE_HOST') | default('0.0.0.0', true)}}"
+        db_password: "{{ lookup('env', 'DATABASE_PASSWORD') | default('admin', true)}}"
+        db_name: "{{ lookup('env', 'DATABASE_NAME') | default('mysql', true)}}"
+
+    - name: template settings
+      template:
+        src: /setup/settings.json.j2
+        dest:  /opt/etherpad-lite/settings.json
+        mode: 0640
+        owner: etherpad-lite
+        group: etherpad-lite

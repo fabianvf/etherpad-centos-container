@@ -1,6 +1,6 @@
 ---
 - name: Install required software packages
-  package: name={{ item }} state=installed 
+  package: name={{ item }} state=installed
   with_items:
   - git
   - gcc
@@ -22,11 +22,31 @@
 - name: create log directory
   file: path=/var/log/etherpad-lite owner=etherpad-lite group=etherpad-lite state=directory
 
-- name: create etherpad-lite startup script
-  template: src=templates/etc_init_etherpad-lite.j2 dest=/etc/init.d/etherpad-lite mode=0755
-
-- name: configure etherpad-lite
-  template: src=templates/opt_etherpad-lite_settings.json.j2 dest=/opt/etherpad-lite/settings.json mode=0640 owner=etherpad-lite group=etherpad-lite
-
 - name: update permissions for etherpad-lite directory
   file: path=/opt/etherpad-lite owner=etherpad-lite group=etherpad-lite recurse=yes state=directory
+
+- name: create etherpad-lite startup script
+  copy: src=etc_init_etherpad-lite dest=/etc/init.d/etherpad-lite mode=0755
+
+- name: create ansible directory
+  file: path=/setup state=directory
+
+- name: copy etherpad-lite settings template
+  copy: src=opt_etherpad-lite_settings.json.j2 dest=/setup/settings.json.j2
+
+- name: copy etherpad-lite initialization playbook
+  copy: src=initialize.yml dest=/setup/initialize.yml
+
+- name: write inventory file
+  copy:
+    content: |
+      localhost
+    dest: /setup/inventory
+
+- name: copy entrypoint script
+  copy:
+    src: entrypoint.sh
+    dest: /usr/bin/entrypoint.sh
+    owner: etherpad-lite
+    group: root
+    mode: 0775
