@@ -1,4 +1,8 @@
 ---
+
+- name: Install epel-release
+  package: name=epel-release state=latest
+
 - name: Install required software packages
   package: name={{ item }} state=installed
   with_items:
@@ -9,6 +13,7 @@
   - python-devel
   - python-pip
   - nodejs
+  - ansible
 
 - name: create etherpad-lite user
   user: name=etherpad-lite shell=/bin/bash
