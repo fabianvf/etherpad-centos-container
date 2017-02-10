@@ -31,7 +31,7 @@
   file: path=/opt/etherpad-lite owner=etherpad-lite group=etherpad-lite recurse=yes state=directory
 
 - name: create etherpad-lite startup script
-  copy: src=etc_init_etherpad-lite dest=/etc/init.d/etherpad-lite mode=0755
+  template: src=etc_init_etherpad-lite dest=/etc/init.d/etherpad-lite mode=0755
 
 - name: create ansible directory
   file: path=/setup state=directory owner=etherpad-lite group=root mode=0775
@@ -46,22 +46,9 @@
   with_fileglob:
     - "./*"
 
-
-# - name: copy etherpad-lite settings template
-#   copy: src=opt_etherpad-lite_settings.json.j2 dest=/setup/settings.json.j2
-
-# - name: copy etherpad-lite initialization playbook
-#   copy: src=initialize.yml dest=/setup/initialize.yml
-
-# - name: write inventory file
-#   copy:
-#     content: |
-#       localhost
-#     dest: /setup/inventory
-
 - name: copy entrypoint script
-  copy:
-    src: entrypoint.sh
+  template:
+    src: entrypoint.sh.j2
     dest: /usr/bin/entrypoint.sh
     owner: etherpad-lite
     group: root
