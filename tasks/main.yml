@@ -31,7 +31,7 @@
   file: path=/opt/etherpad-lite owner=etherpad-lite group=etherpad-lite recurse=yes state=directory
 
 - name: create etherpad-lite startup script
-  template: src=etc_init_etherpad-lite dest=/etc/init.d/etherpad-lite mode=0755
+  template: src=etc_init_etherpad-lite.j2 dest=/etc/init.d/etherpad-lite mode=0755
 
 - name: create ansible directory
   file: path=/setup state=directory owner=etherpad-lite group=root mode=0775
