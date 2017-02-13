@@ -6,10 +6,12 @@
   tasks:
     - name: Get environment variables
       set_fact:
-        db_user: "{{ lookup('env', 'DATABASE_USER') | default('admin', true)}}"
-        db_host: "{{ lookup('env', 'DATABASE_HOST') | default('0.0.0.0', true)}}"
-        db_password: "{{ lookup('env', 'DATABASE_PASSWORD') | default('admin', true)}}"
-        db_name: "{{ lookup('env', 'DATABASE_NAME') | default('mysql', true)}}"
+        db_user: "{{ lookup('env', 'DATABASE_USER') }}"
+        db_host: "{{ lookup('env', 'DATABASE_HOST') }}"
+        db_password: "{{ lookup('env', 'DATABASE_PASSWORD') }}"
+        db_name: "{{ lookup('env', 'DATABASE_NAME') }}"
+        session_key: "{{ lookup('env', 'SESSION_KEY') }}"
+        padadmin_password: "{{ lookup('env', 'ADMIN_PASSWORD') }}"
 
     - name: template settings
       template:
